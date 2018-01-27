@@ -21,7 +21,7 @@ export default class extends Phaser.State {
 
     this.player.addShadow()
     this.game.add.existing(this.player)
-    this.game.world.setBounds(-1000, -1000, TILE_SIZE * ROOM_COLS * BATTLEFIELD_COLS, TILE_SIZE * ROOM_ROWS * BATTLEFIELD_ROWS)
+    this.game.world.setBounds(-1024, -1024, 1024 + TILE_SIZE * ROOM_COLS * BATTLEFIELD_COLS, 1024 + TILE_SIZE * ROOM_ROWS * BATTLEFIELD_ROWS)
     this.game.camera.follow(this.player)
   }
 

@@ -14,22 +14,31 @@ export default class extends Phaser.Sprite {
   }
 
   update () {
+    let v = new Phaser.Point()
     if (this.game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
-      this.body.velocity.x = -SPEED
+      v.x = -1
       this.animations.play('walk', ANIMATIONS_SPEED, true)
       this.scale.setTo(-CELL_SCALE, CELL_SCALE)
     } else if (this.game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
-      this.body.velocity.x = SPEED
+      v.x = 1
       this.animations.play('walk', ANIMATIONS_SPEED, true)
       this.scale.setTo(CELL_SCALE, CELL_SCALE)
-    } else if (this.game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
-      this.body.velocity.y = -SPEED
+    }
+
+    if (this.game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
+      v.y = -1
       this.animations.play('walk', ANIMATIONS_SPEED, true)
     } else if (this.game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
-      this.body.velocity.y = SPEED
+      v.y = 1
       this.animations.play('walk', ANIMATIONS_SPEED, true)
-    } else {
-      this.body.velocity.setTo(0)
+    } 
+
+    v.normalize()
+    v.multiply(SPEED, SPEED)
+    this.body.velocity.x = v.x
+    this.body.velocity.y = v.y
+    
+    if (v.getMagnitude() === 0) {
       this.animations.play('idle', ANIMATIONS_SPEED, true)
     }
 
