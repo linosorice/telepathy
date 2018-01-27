@@ -25,6 +25,10 @@ class Game extends Phaser.Game {
       this.state.start('Boot')
     }
   }
+
+  create () {
+    this.physics.startSystem(Phaser.Physics.ARCADE)
+  }
 }
 
 window.game = new Game()

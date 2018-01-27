@@ -15,8 +15,10 @@ export default class extends Phaser.State {
     //
     this.load.image('ground', 'assets/images/ground.png')
     this.game.load.image('circle_mask', 'assets/images/circle_mask.png')
-    this.game.load.image('p1_pic', 'assets/images/p1_pic.jpg')
-    this.game.load.image('p2_pic', 'assets/images/p2_pic.jpg')
+    this.game.load.spritesheet('player', 'assets/images/player.png', 32, 32, 8)
+    this.game.load.spritesheet('monster', 'assets/images/monster.png', 32, 32, 8)
+    this.game.load.spritesheet('skeleton', 'assets/images/skeleton.png', 32, 32, 8)
+    this.game.load.image('shadow', 'assets/images/shadow.png')
   }
 
   create () {
