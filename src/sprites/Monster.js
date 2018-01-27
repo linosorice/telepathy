@@ -1,10 +1,11 @@
 import Phaser from 'phaser'
 import { CELL_SCALE, ANIMATIONS_SPEED } from '../constants'
+import socket from '../socket'
 
 const SPEED = 500
 
 export default class extends Phaser.Sprite {
-  constructor ({ game, x, y, asset, networked }) {
+  constructor ({ game, x, y, asset, networked, i }) {
     super(game, x, y, asset)
     this.networked = networked
     this.anchor.setTo(0.5)
@@ -12,9 +13,24 @@ export default class extends Phaser.Sprite {
     this.game.physics.arcade.enable(this)
     this.animations.add('walk', [4, 5, 6, 7])
     this.animations.add('idle', [0, 1, 2, 3])
+    this.i = i
+    if (this.networked) {
+      socket.on('coords', ({x, y}, k) => {
+        if (this.i === k) {
+          this.x = x
+          this.y = y
+        }
+      })
+    }
   }
 
   update () {
+    const x = this.body.position.x
+    const y = this.body.position.y
+    if (!this.networked) {
+      socket.emit('coords', {x, y}, this.i)
+    }
+
     /* Movement */
     if (!this.networked) {
       let v = new Phaser.Point()

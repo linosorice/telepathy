@@ -14,6 +14,6 @@ export default class extends Phaser.Sprite {
   }
 
   update () {
-//    this.game.physics.arcade.collide(this, this.player, function () { console.log('test') })
+    this.game.physics.arcade.collide(this, this.player, function () { console.log('test') })
   }
 }

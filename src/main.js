@@ -10,11 +10,6 @@ import WaitingState from './states/Waiting'
 
 import config from './config'
 import socket from './socket'
-  /*
-socket.on('accepted', i => {
-
-})
-*/
 
 class Game extends Phaser.Game {
   constructor () {
@@ -42,8 +37,6 @@ class Game extends Phaser.Game {
 }
 
 window.game = new Game()
-
-socket.on('game_ready', () => window.game.state.start('Game'))
 
 if (window.cordova) {
   var app = {

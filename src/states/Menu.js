@@ -17,14 +17,17 @@ export default class extends Phaser.State {
     let buttonPlay = this.game.add.button(this.game.world.centerX, this.game.world.centerY, 'button_play', function () {
       socket.emit('join_room')
       buttonPlay.frame = 1
-      setTimeout(() => {
+      console.log('before')
+      socket.on('accepted', i => {
+      console.log('after')
         buttonPlay.frame = 0
         // var serverIP = prompt('Please enter IP of the server', '')
         // if (serverIP != null) {
-        obj.state.start('Waiting')
+        obj.state.start('Waiting', true, false, i)
         // }
       }, 200)
     })
+
     buttonPlay.anchor.set(0.5, 0.5)
   }
 }

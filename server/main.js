@@ -27,14 +27,11 @@ const defaultNamespace = io.of('/')
 
 io.on('connection', socket => {
   // Broadcast coordinates
-  defaultNamespace.to('defaultRoom').on('coords', (coords, i) => {
+  socket.on('coords', (coords, i) => {
     console.log('coords:', coords, i)
     // socket.coords = coords
-    socket.to(defaultRoom).emit('coords', {
-      coords,
-      i
+    socket.broadcast.emit('coords', coords, i)
     })
-  })
 
   // Broadcast game over
   defaultNamespace.to('defaultRoom').on('game_over', i => {
@@ -53,20 +50,22 @@ io.on('connection', socket => {
   // Add a player to a room and generate and id
   socket.on('join_room', () => {
     console.log('join_room', defaultRoom)
-    socket.join(defaultRoom)
-    // The following could have a race condition
-    defaultNamespace.to(defaultRoom).clients((err, players) => {
-      console.log('players', players)
-      if (err) {
-        console.error(err)
-        return
-      }
-      const i = players.length
-      socket.send('accepted', i)
-      if (i === 3) {
-        defaultNamespace.to(defaultRoom).emit('game_ready')
-      }
-      console.log('joined with i:', i)
+    socket.join(defaultRoom, () => {
+      // The following could have a race condition
+      defaultNamespace.to(defaultRoom).clients((err, players) => {
+        console.log('players', players)
+        if (err) {
+          console.error(err)
+          return
+        }
+        const i = players.length - 1
+        socket.emit('accepted', i)
+        console.log('joined with i:', i)
+        if (i === 2) {
+          console.log('broadcasting game_ready')
+          defaultNamespace.to(defaultRoom).emit('game_ready')
+        }
+      })
     })
   })
 

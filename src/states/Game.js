@@ -6,7 +6,10 @@ import Monster from '../sprites/Monster'
 import Torch from '../sprites/Torch'
 
 export default class extends Phaser.State {
-  init () {}
+  init (i) {
+    this.i = i
+  }
+
   preload () {}
 
   create () {
@@ -25,7 +28,8 @@ export default class extends Phaser.State {
       x: 0,
       y: 0,
       asset: 'player',
-      networked: false
+      networked: this.i !== 0,
+      i: 0
     })
 
     this.player2 = new Player({
@@ -33,7 +37,8 @@ export default class extends Phaser.State {
       x: 100,
       y: 0,
       asset: 'player',
-      networked: true
+      networked: this.i !== 1,
+      i: 1
     })
 
     this.monster = new Monster({
@@ -41,7 +46,8 @@ export default class extends Phaser.State {
       x: 200,
       y: 0,
       asset: 'monster',
-      networked: true
+      networked: this.i !== 2,
+      i: 2
     })
 
     /* Set battlefield */
@@ -59,7 +65,10 @@ export default class extends Phaser.State {
     this.game.add.existing(this.monster)
 
     /* Set local player */
-    const localPlayer = this.player1
+    console.log('Game', this.i)
+    const localPlayer = this.i === 0 ? this.player1
+      : this.i === 1 ? this.player2
+         : this.monster
 
     /* Torch */
     this.torch = new Torch({
