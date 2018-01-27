@@ -54,8 +54,10 @@ export default class extends Phaser.State {
       setTimeout(() => {
         this.player1.setTransmission(false)
         this.game.camera.follow(this.player1)
+        this.torch.setPlayer(this.player1)
       }, 2000)
       this.game.camera.follow(this.player2)
+        this.torch.setPlayer(this.player2)
     }, this)
 
   }

@@ -31,4 +31,8 @@ export default class extends Phaser.Sprite {
       // This just tells the engine it should update the texture cache
     this.shadowTexture.dirty = true
   }
+
+  setPlayer (player) {
+    this.player = player
+  }
 }
