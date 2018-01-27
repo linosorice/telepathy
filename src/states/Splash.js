@@ -19,6 +19,8 @@ export default class extends Phaser.State {
     this.game.load.spritesheet('monster', 'assets/images/monster.png', 32, 32, 8)
     this.game.load.spritesheet('skeleton', 'assets/images/skeleton.png', 32, 32, 8)
     this.game.load.image('shadow', 'assets/images/shadow.png')
+    this.game.load.spritesheet('walls', 'assets/images/walls.png', 32, 32, 16)
+    this.game.load.spritesheet('dungeon', 'assets/images/dungeon.png', 32, 32, 16)
   }
 
   create () {
