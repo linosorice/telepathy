@@ -1,6 +1,6 @@
 import Phaser from 'phaser'
 
-const LIGHT_RADIUS = 128
+const LIGHT_RADIUS = 256
 
 export default class extends Phaser.Sprite {
   constructor ({ game, player }) {
