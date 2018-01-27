@@ -25,7 +25,7 @@ export default class extends Phaser.State {
 
   render () {
     if (this.fontsReady) {
-      this.state.start('Game')
+      this.state.start('Splash')
     }
   }
 

@@ -14,7 +14,7 @@ export default class extends Phaser.State {
         buttonPlay.frame = 0
         var serverIP = prompt('Please enter IP of the server', '')
         if (serverIP != null) {
-          obj.state.start('Waiting')
+          obj.state.start('Game')
         }
       }, 200)
     })
