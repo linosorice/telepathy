@@ -2,7 +2,7 @@
 import Phaser from 'phaser'
 import Battlefield from './modules/Battlefield'
 import Player from '../sprites/Player.js'
-import { TILE_SIZE, ROOM_COLS, ROOM_ROWS, BATTLEFIELD_COLS, BATTLEFIELD_ROWS } from '../constants.js'
+import Torch from '../sprites/Torch'
 
 export default class extends Phaser.State {
   init () {}
@@ -21,8 +21,14 @@ export default class extends Phaser.State {
 
     this.player.addShadow()
     this.game.add.existing(this.player)
-    this.game.world.setBounds(-1024, -1024, 1024 + TILE_SIZE * ROOM_COLS * BATTLEFIELD_COLS, 1024 + TILE_SIZE * ROOM_ROWS * BATTLEFIELD_ROWS)
+    this.game.world.setBounds(-this.game.width / 2, -this.game.height / 2, this.game.width * 2, this.game.height * 2)
     this.game.camera.follow(this.player)
+
+    this.torch = new Torch({
+      game: this.game,
+      player: this.player
+    })
+    this.game.add.existing(this.torch)
   }
 
   render () {
