@@ -12,10 +12,10 @@ export default class extends Phaser.State {
       buttonPlay.frame = 1
       setTimeout(() => {
         buttonPlay.frame = 0
-        var serverIP = prompt('Please enter IP of the server', '')
-        if (serverIP != null) {
-          obj.state.start('Game')
-        }
+        // var serverIP = prompt('Please enter IP of the server', '')
+        // if (serverIP != null) {
+        obj.state.start('Waiting')
+        // }
       }, 200)
     })
     buttonPlay.anchor.set(0.5, 0.5)
