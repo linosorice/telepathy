@@ -87,13 +87,12 @@ export default class extends Phaser.State {
 
   update () {
     /* Monster kills player */
-    /*this.game.physics.arcade.overlap(this.monster, [this.player1, this.player2], function (monster, player) {
-      console.log('test')
+    this.game.physics.arcade.overlap(this.monster, [this.player1, this.player2], function (monster, player) {
       if (!this.defeat) {
         this.defeatSound.play()
         this.defeat = true
       }
-    }, this)*/
+    }, null, this)
   }
 
   render () {
