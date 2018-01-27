@@ -8,6 +8,36 @@ import GameState from './states/Game'
 
 import config from './config'
 
+import io from 'socket.io-client'
+
+console.log('ciro')
+const socket = io('http://localhost:8000', {path: '/gamews', forceNew: true})
+
+socket.on('connect', () => {
+  // console.log('socket is:', socket)
+  console.log('connected')
+})
+
+socket.on('ciro', (socket) => {
+  console.log('ciro')
+})
+
+// setTimeout(() => { console.log(socket)}, 3000)
+
+socket.emit('create_room')
+socket.emit('list_rooms')
+socket.on('rooms_list', (rooms) => {
+  console.log(rooms)
+  const room = rooms[0]
+  socket.emit('list_players', room)
+  socket.on('players_list', (players) => console.log(players))
+})
+
+socket.on('disconnect', () => {
+  console.log('disconnected')
+})
+
+// socket.emit('disconnect')
 class Game extends Phaser.Game {
   constructor () {
     const docElement = document.documentElement

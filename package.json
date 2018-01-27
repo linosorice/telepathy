@@ -5,8 +5,9 @@
     "author": "Pasqualino Sorice <lino.sorice@gmail.com>",
     "main": "index.js",
     "scripts": {
-        "dev": "webpack",
-        "deploy": "webpack --config webpack.production.config.js",
+        "start:client": "webpack-dev-server --open --config webpack.config.js",
+        "start:server": "nodemon ./server/main.js",
+        "build": "webpack --config webpack.production.config.js",
         "cordova": "webpack --config webpack.cordova.config.js",
         "lint": "standard"
     },
@@ -23,8 +24,10 @@
         "cordova": "^8.0.0",
         "expose-loader": "^0.7.4",
         "html-webpack-plugin": "^2.30.1",
+        "nodemon": "^1.14.11",
         "standard": "^10.0.3",
-        "webpack": "^3.10.0"
+        "webpack": "^3.10.0",
+        "webpack-dev-server": "^2.11.1"
     },
     "dependencies": {
         "cordova-android": "^7.0.0",
