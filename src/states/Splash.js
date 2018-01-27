@@ -21,11 +21,13 @@ export default class extends Phaser.State {
     this.game.load.image('shadow', 'assets/images/shadow.png')
     this.game.load.spritesheet('walls', 'assets/images/walls.png', 32, 32, 16)
     this.game.load.spritesheet('dungeon', 'assets/images/dungeon.png', 32, 32, 16)
+    this.game.load.spritesheet('button_play', 'assets/images/button_play.png', 64, 32, 2)
+    this.game.load.image('title', 'assets/images/title.png')
     this.load.audio('heartbeat', './assets/audio/heartbeat.mp3')
     this.load.audio('run', './assets/audio/run.mp3')
   }
 
   create () {
-    this.state.start('Game')
+    this.state.start('Menu')
   }
 }
