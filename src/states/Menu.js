@@ -7,6 +7,11 @@ export default class extends Phaser.State {
     title.position.x = this.game.world.centerX
     title.position.y = this.game.world.centerY - 200
 
+    let credits = this.game.add.sprite(0, 0, 'credits')
+    credits.anchor.setTo(0.5, 0.5)
+    credits.position.x = this.game.world.centerX
+    credits.position.y = this.game.world.centerY + 200
+
     let obj = this
     let buttonPlay = this.game.add.button(this.game.world.centerX, this.game.world.centerY, 'button_play', function () {
       buttonPlay.frame = 1

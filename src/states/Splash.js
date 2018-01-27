@@ -24,6 +24,7 @@ export default class extends Phaser.State {
     this.game.load.spritesheet('button_play', 'assets/images/button_play.png', 128, 64, 2)
     this.game.load.spritesheet('loading', 'assets/images/loading.png', 32, 32, 3)
     this.game.load.image('title', 'assets/images/title.png')
+    this.game.load.image('credits', 'assets/images/credits.png')
     this.load.audio('heartbeat', './assets/audio/heartbeat.mp3')
     this.load.audio('run', './assets/audio/run.mp3')
     this.load.audio('victory', './assets/audio/victory.mp3')
