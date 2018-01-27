@@ -1,7 +1,8 @@
 /* globals __DEV__ */
 import Phaser from 'phaser'
 import Battlefield from './modules/Battlefield'
-import Player from '../sprites/Player.js'
+import Player from '../sprites/Player'
+import Monster from '../sprites/Monster'
 import Torch from '../sprites/Torch'
 
 export default class extends Phaser.State {
@@ -20,7 +21,7 @@ export default class extends Phaser.State {
       x: 0,
       y: 0,
       asset: 'player',
-      networked: false
+      networked: true
     })
 
     this.player2 = new Player({
@@ -31,21 +32,41 @@ export default class extends Phaser.State {
       networked: true
     })
 
+    this.monster = new Monster({
+      game: this.game,
+      x: 200,
+      y: 0,
+      asset: 'monster',
+      networked: false
+    })
+
+    /* Set battlefield */
     let battlefield = new Battlefield(this.game, this.player1)
     battlefield.create()
 
+    /* Add shadows */
     this.player1.addShadow()
     this.player2.addShadow()
+    this.monster.addShadow()
+
+    /* Add entities */
     this.game.add.existing(this.player1)
     this.game.add.existing(this.player2)
-    this.game.world.setBounds(-this.game.width / 2, -this.game.height / 2, this.game.width * 2, this.game.height * 2)
-    this.game.camera.follow(this.player1)
+    this.game.add.existing(this.monster)
 
+    /* Set local player */
+    const localPlayer = this.monster
+
+    /* Torch */
     this.torch = new Torch({
       game: this.game,
-      player: this.player1
+      player: localPlayer
     })
     this.game.add.existing(this.torch)
+
+    /* Set world bounds and camera */
+    this.game.world.setBounds(-this.game.width / 2, -this.game.height / 2, this.game.width * 2, this.game.height * 2)
+    this.game.camera.follow(localPlayer)
 
     /* Transmission on */
     const keyTransm = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE)
@@ -53,13 +74,12 @@ export default class extends Phaser.State {
       this.player1.setTransmission(true)
       setTimeout(() => {
         this.player1.setTransmission(false)
-        this.game.camera.follow(this.player1)
-        this.torch.setPlayer(this.player1)
+        this.game.camera.follow(localPlayer)
+        this.torch.setPlayer(localPlayer)
       }, 2000)
       this.game.camera.follow(this.player2)
-        this.torch.setPlayer(this.player2)
+      this.torch.setPlayer(this.player2)
     }, this)
-
   }
 
   render () {
