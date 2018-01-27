@@ -21,9 +21,9 @@ server.listen(8000, function () { // Listens to port 8081
   console.log('Listening on ' + server.address().port)
 })
 
+const defaultRoom = 'telepath'
+
 io.on('connection', socket => {
-  // socket.emit('allplayers',getAllPlayers())
-  // socket.broadcast.emit('newplayer',socket.player)
   io.on('coords', (coords) => {
     // socket.coords = coords
     const roomId = socket.rooms[0]
@@ -32,23 +32,35 @@ io.on('connection', socket => {
     })
   })
 
+  /* Used in a future version of the game
   socket.on('create_room', () => {
-    console.log('creating room')
     const roomId = uuidv1() // socket.id //uuidv1()
     rooms.add(roomId)
     socket.join(roomId)
   })
+  */
 
-  io.on('join_room', (socket, roomId) => {
+  io.on('join_room', (socket, roomId = defaultRoom) => {
     socket.join(roomId)
+    io.of(roomId).clients((err, players) => {
+      if (err) {
+        console.error(err)
+        return
+      }
+      if (players.length === 3) {
+        socket.emit('game_ready')
+      }
+    })
   })
 
+  /* Used in a future version of the game
   socket.on('list_rooms', () => {
     console.log('list_rooms')
     socket.emit('rooms_list', Array.from(rooms))
   })
+  */
 
-  socket.on('list_players', (room) => {
+  socket.on('list_players', (room = defaultRoom) => {
     console.log('list_players')
     io.of(room).clients((err, players) => {
       if (err) {
