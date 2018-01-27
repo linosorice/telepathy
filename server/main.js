@@ -3,13 +3,13 @@ const app = express()
 const path = require('path')
 const server = require('http').Server(app)
 const io = require('socket.io')(server, {path: '/gamews'})
-const uuidv1 = require('uuid/v1')
+// const uuidv1 = require('uuid/v1')
 
-// Set of players will contain guids
+// Set of players -- for a later version
 // const players = new Set()
 
-// Set of rooms
-const rooms = new Set()
+// Set of rooms -- for a later version
+// const rooms = new Set()
 
 app.use(express.static(path.join(__dirname, '../build/')))
 
@@ -23,13 +23,23 @@ server.listen(8000, function () { // Listens to port 8081
 
 const defaultRoom = 'telepath'
 
+const defaultNamespace = io.of('/')
+
 io.on('connection', socket => {
-  io.on('coords', (coords) => {
+  // Broadcast coordinates
+  defaultNamespace.to('defaultRoom').on('coords', (coords, i) => {
+    console.log('coords:', coords, i)
     // socket.coords = coords
-    const roomId = socket.rooms[0]
-    socket.to(roomId).emit('coords', {
-      coords
+    socket.to(defaultRoom).emit('coords', {
+      coords,
+      i
     })
+  })
+
+  // Broadcast game over
+  defaultNamespace.to('defaultRoom').on('game_over', i => {
+    console.log('game_over', i)
+    defaultNamespace.to(defaultRoom).emit('game_over', i)
   })
 
   /* Used in a future version of the game
@@ -40,16 +50,23 @@ io.on('connection', socket => {
   })
   */
 
-  io.on('join_room', (socket, roomId = defaultRoom) => {
-    socket.join(roomId)
-    io.of(roomId).clients((err, players) => {
+  // Add a player to a room and generate and id
+  socket.on('join_room', () => {
+    console.log('join_room', defaultRoom)
+    socket.join(defaultRoom)
+    // The following could have a race condition
+    defaultNamespace.to(defaultRoom).clients((err, players) => {
+      console.log('players', players)
       if (err) {
         console.error(err)
         return
       }
-      if (players.length === 3) {
-        socket.emit('game_ready')
+      const i = players.length
+      socket.send('accepted', i)
+      if (i === 3) {
+        defaultNamespace.to(defaultRoom).emit('game_ready')
       }
+      console.log('joined with i:', i)
     })
   })
 
@@ -60,6 +77,7 @@ io.on('connection', socket => {
   })
   */
 
+  /* For the future
   socket.on('list_players', (room = defaultRoom) => {
     console.log('list_players')
     io.of(room).clients((err, players) => {
@@ -71,9 +89,21 @@ io.on('connection', socket => {
       socket.emit('players_list', players)
     })
   })
+  */
 
-  socket.on('disconnect', socket => {
-    console.log('disconnect', socket)
+  socket.on('disconnect', err => {
+    console.log('socket was', socket.id)
+    console.log('disconnect', err)
+    defaultNamespace.to(defaultRoom).clients((err, players) => {
+      if (err) {
+        console.error(err)
+        return
+      }
+      const i = players.findIndex(p => p === socket.id)
+      if (i !== -1) {
+        console.log('game_over', i)
+        defaultNamespace.to(defaultRoom).emit('game_over', 0)
+      }
+    })
   })
 })
-
