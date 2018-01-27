@@ -16,6 +16,9 @@ export default class extends Phaser.State {
     heartbeat.volume = 1
     heartbeat.play()
 
+    /* Add defeat sound */
+    this.defeatSound = this.game.add.audio('defeat')
+
     this.player1 = new Player({
       game: this.game,
       x: 0,
@@ -80,6 +83,17 @@ export default class extends Phaser.State {
       this.game.camera.follow(this.player2)
       this.torch.setPlayer(this.player2)
     }, this)
+  }
+
+  update () {
+    /* Monster kills player */
+    /*this.game.physics.arcade.overlap(this.monster, [this.player1, this.player2], function (monster, player) {
+      console.log('test')
+      if (!this.defeat) {
+        this.defeatSound.play()
+        this.defeat = true
+      }
+    }, this)*/
   }
 
   render () {
