@@ -12,7 +12,8 @@ export default class extends Phaser.Sprite {
     this.game.physics.arcade.enable(this)
     this.animations.add('walk', [4, 5, 6, 7])
     this.animations.add('idle', [0, 1, 2, 3])
-    this.steps = this.game.add.audio('walk')
+    this.steps = this.game.add.audio('run')
+    this.steps.volume = 0.5
   }
 
   update () {

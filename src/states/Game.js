@@ -13,7 +13,7 @@ export default class extends Phaser.State {
     const heartbeat = this.game.add.audio('heartbeat')
     heartbeat.loop = true
     heartbeat.volume = 1
-//    heartbeat.play()
+    heartbeat.play()
 
     this.player1 = new Player({
       game: this.game,
