@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 
+
 export default class extends Phaser.State {
   create () {
     let title = this.game.add.sprite(0, 0, 'loading')

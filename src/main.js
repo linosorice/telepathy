@@ -9,10 +9,12 @@ import MenuState from './states/Menu'
 import WaitingState from './states/Waiting'
 
 import config from './config'
+import socket from './socket'
+  /*
+socket.on('accepted', i => {
 
-import io from 'socket.io-client'
-
-const socket = io('http://localhost:8000', {path: '/gamews', forceNew: true})
+})
+*/
 
 class Game extends Phaser.Game {
   constructor () {
@@ -40,6 +42,8 @@ class Game extends Phaser.Game {
 }
 
 window.game = new Game()
+
+socket.on('game_ready', () => window.game.state.start('Game'))
 
 if (window.cordova) {
   var app = {

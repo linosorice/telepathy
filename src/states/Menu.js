@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import socket from '../socket'
 
 export default class extends Phaser.State {
   create () {
@@ -14,6 +15,7 @@ export default class extends Phaser.State {
 
     let obj = this
     let buttonPlay = this.game.add.button(this.game.world.centerX, this.game.world.centerY, 'button_play', function () {
+      socket.emit('join_room')
       buttonPlay.frame = 1
       setTimeout(() => {
         buttonPlay.frame = 0
