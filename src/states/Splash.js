@@ -21,6 +21,8 @@ export default class extends Phaser.State {
     this.game.load.image('shadow', 'assets/images/shadow.png')
     this.game.load.spritesheet('walls', 'assets/images/walls.png', 32, 32, 16)
     this.game.load.spritesheet('dungeon', 'assets/images/dungeon.png', 32, 32, 16)
+    this.load.audio('heartbeat', './assets/audio/heartbeat.mp3')
+    this.load.audio('walk', './assets/audio/walk.mp3')
   }
 
   create () {
