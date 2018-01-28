@@ -4,7 +4,7 @@ const LIGHT_RADIUS = 256
 
 export default class extends Phaser.Sprite {
   constructor ({ game, player }) {
-    let shadowTexture = game.add.bitmapData(1920, 1920)
+    let shadowTexture = game.add.bitmapData(3000, 3000)
     super(game, -game.width, -game.height, shadowTexture)
     this.shadowTexture = shadowTexture
     this.player = player
@@ -13,7 +13,7 @@ export default class extends Phaser.Sprite {
 
   update () {
     this.shadowTexture.context.fillStyle = 'rgb(0, 0, 0)'
-    this.shadowTexture.context.fillRect(0, 0, 1920, 1920)
+    this.shadowTexture.context.fillRect(0, 0, 3000, 3000)
 
       // Draw circle of light with a soft edge
     let gradient = this.shadowTexture.context.createRadialGradient(

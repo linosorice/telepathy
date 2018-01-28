@@ -1,5 +1,5 @@
 export default {
-  gameWidth: 800,
-  gameHeight: 600,
+  gameWidth: 1200,
+  gameHeight: 800,
   localStorageName: 'cryptowar'
 }

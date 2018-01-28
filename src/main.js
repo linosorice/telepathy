@@ -12,7 +12,7 @@ import config from './config'
 
 import io from 'socket.io-client'
 
-const socket = io('http://localhost:3456', {path: '/gamews', forceNew: true})
+const socket = io('http://localhost:8000', {path: '/gamews', forceNew: true})
 
 class Game extends Phaser.Game {
   constructor () {
@@ -20,7 +20,7 @@ class Game extends Phaser.Game {
     // const width = docElement.clientWidth > config.gameWidth ? config.gameWidth : docElement.clientWidth
     // const height = docElement.clientHeight > config.gameHeight ? config.gameHeight : docElement.clientHeight
 
-    super(config.gameWidt, config.gameHeight, Phaser.CANVAS, 'content', null)
+    super(config.gameWidth, config.gameHeight, Phaser.AUTO, 'content', null)
 
     this.state.add('Boot', BootState, false)
     this.state.add('Splash', SplashState, false)
