@@ -32,8 +32,8 @@ export default class extends Phaser.State {
 
     this.player1 = new Player({
       game: this.game,
-      x: 0,
-      y: 0,
+      x: 1000,
+      y: -200,
       asset: 'player',
       networked: this.i !== 0,
       i: 0
@@ -41,7 +41,7 @@ export default class extends Phaser.State {
 
     this.player2 = new Player({
       game: this.game,
-      x: 100,
+      x: 0,
       y: 0,
       asset: 'player',
       networked: this.i !== 1,
@@ -50,8 +50,8 @@ export default class extends Phaser.State {
 
     this.monster = new Monster({
       game: this.game,
-      x: 200,
-      y: 0,
+      x: 860,
+      y: 860,
       asset: 'monster',
       networked: this.i !== 2,
       i: 2
