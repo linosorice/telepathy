@@ -28,7 +28,6 @@ const defaultNamespace = io.of('/')
 io.on('connection', socket => {
   // Broadcast coordinates
   socket.on('coords', (coords, i) => {
-    console.log('coords:', coords, i)
     // socket.coords = coords
     socket.broadcast.emit('coords', coords, i)
     })

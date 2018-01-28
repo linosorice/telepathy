@@ -58,7 +58,6 @@ if (window.cordova) {
     },
 
     receivedEvent: function (id) {
-      console.log('Received Event: ' + id)
     }
   }
 
