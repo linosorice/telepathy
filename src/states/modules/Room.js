@@ -64,7 +64,8 @@ export default class Room {
                   ROOM_SIZE * (x - (BATTLEFIELD_COLS - 1) / 2),
                 x: TILE_SIZE_SPACED * (j - (ROOM_ROWS - 1) / 2) + this.game.world.centerX +
                   ROOM_SIZE * (y - (BATTLEFIELD_ROWS - 1) / 2),
-                north: true
+                north: true,
+                player: this.player
               })
             )
             continue

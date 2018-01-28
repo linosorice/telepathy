@@ -51,7 +51,7 @@ export default class extends Phaser.State {
     })
 
     /* Set battlefield */
-    let battlefield = new Battlefield(this.game, this.player1)
+    let battlefield = new Battlefield(this.game, [this.player1, this.player2, this.monster])
     battlefield.create()
 
     /* Add shadows */

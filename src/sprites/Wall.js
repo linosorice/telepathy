@@ -10,10 +10,12 @@ export default class extends Phaser.Sprite {
     this.frame = north ? 8 : Math.random() > VARIANT_TILE ? 0 : 1
     this.anchor.setTo(0.5)
     this.scale.setTo(CELL_SCALE, CELL_SCALE)
-    this.player = player
+    this.players = player
   }
 
   update () {
-    this.game.physics.arcade.collide(this, this.player, function () { console.log('test') })
+    this.players.forEach(p =>
+      this.game.physics.arcade.collide(this, p, function () { console.log('test') })
+    )
   }
 }
