@@ -28,8 +28,13 @@ const defaultNamespace = io.of('/')
 io.on('connection', socket => {
   // Broadcast coordinates
   socket.on('transmission', () => {
-    // socket.coords = coords
     socket.broadcast.emit('transmission')
+    })
+
+  socket.on('game_over', () => {
+    console.log('game_over')
+    //  socket.broadcast.emit('game_over')
+    io.sockets.emit('game_over')
     })
 
   socket.on('coords', (coords, i) => {
@@ -38,10 +43,12 @@ io.on('connection', socket => {
     })
 
   // Broadcast game over
+  /*
   defaultNamespace.to('defaultRoom').on('game_over', i => {
     console.log('game_over', i)
     defaultNamespace.to(defaultRoom).emit('game_over', i)
   })
+  */
 
   /* Used in a future version of the game
   socket.on('create_room', () => {

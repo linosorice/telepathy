@@ -25,6 +25,11 @@ export default class extends Phaser.State {
     this.defeatSound = this.game.add.audio('defeat')
     this.victorySound = this.game.add.audio('victory')
 
+    socket.on('game_over', () => {
+      console.log('game is over')
+      setTimeout(() => this.state.start('Menu'), 2000)
+    })
+
     this.player1 = new Player({
       game: this.game,
       x: 0,
@@ -118,8 +123,10 @@ export default class extends Phaser.State {
 
   update () {
     /* Monster kills player */
-    this.game.physics.arcade.overlap(this.monster, [this.player1, this.player2], function (monster, player) {
+    this.game.physics.arcade.overlap(this.monster, [this.player1, this.player2],
+      function (monster, player) {
       if (!this.defeat) {
+        socket.emit('game_over')
         this.defeatSound.play()
         this.defeat = true
       }
@@ -128,6 +135,7 @@ export default class extends Phaser.State {
     /* Victory */
     this.game.physics.arcade.overlap(this.player1, this.player2, function (player1, player2) {
       if (!this.victory) {
+        socket.emit('game_over')
         this.victorySound.play()
         this.victory = true
       }
