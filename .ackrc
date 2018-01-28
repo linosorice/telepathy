@@ -1,0 +1,4 @@
+--ignore-dir=dist
+--ignore-dir=build
+--ignore-dir=platforms
+--ignore-dir=plugins

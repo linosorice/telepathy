@@ -32,7 +32,7 @@ export default class extends Phaser.Sprite {
     }
 
     /* Movement */
-    if (!this.networked) {
+    if (!this.networked && !this.transmissionOn) {
       let v = new Phaser.Point()
       if (this.game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
         v.x = -1
@@ -69,5 +69,9 @@ export default class extends Phaser.Sprite {
   addShadow () {
     this.shadow = this.game.add.sprite(this.x, this.y + 8, 'shadow')
     this.shadow.anchor.setTo(0.5)
+  }
+
+  setTransmission (toggle) {
+    this.transmissionOn = toggle
   }
 }

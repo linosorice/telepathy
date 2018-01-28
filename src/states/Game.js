@@ -5,6 +5,8 @@ import Player from '../sprites/Player'
 import Monster from '../sprites/Monster'
 import Torch from '../sprites/Torch'
 
+import socket from '../socket'
+
 export default class extends Phaser.State {
   init (i) {
     this.i = i
@@ -70,6 +72,10 @@ export default class extends Phaser.State {
       : this.i === 1 ? this.player2
          : this.monster
 
+    const otherPlayer = this.i === 0 ? this.player2
+      : this.i === 1 ? this.player1
+         : [this.player1, this.player2]
+
     /* Torch */
     this.torch = new Torch({
       game: this.game,
@@ -81,18 +87,33 @@ export default class extends Phaser.State {
     this.game.world.setBounds(-360, -560, 1920, 1920)
     this.game.camera.follow(localPlayer)
 
-    /* Transmission on */
-    const keyTransm = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE)
-    keyTransm.onDown.add(function () {
-      this.player1.setTransmission(true)
+    socket.on('transmission', () => {
+      localPlayer.setTransmission(true)
       setTimeout(() => {
-        this.player1.setTransmission(false)
+        localPlayer.setTransmission(false)
         this.game.camera.follow(localPlayer)
         this.torch.setPlayer(localPlayer)
       }, 2000)
-      this.game.camera.follow(this.player2)
-      this.torch.setPlayer(this.player2)
-    }, this)
+      // if it's the monster, frame the two players in sequence
+      if (Array.isArray(otherPlayer)) {
+        this.game.camera.follow(otherPlayer[0])
+        this.torch.setPlayer(otherPlayer[0])
+        setTimeout(() => {
+          this.game.camera.follow(otherPlayer[1])
+          this.torch.setPlayer(otherPlayer[1])
+        }, 1000)
+      } else {
+        this.game.camera.follow(otherPlayer)
+        this.torch.setPlayer(otherPlayer)
+      }
+    })
+    /* Transmission on */
+    if(!Array.isArray(otherPlayer)) {
+      const keyTransm = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE)
+      keyTransm.onDown.add(function () {
+        socket.emit('transmission')
+      }, this)
+    }
   }
 
   update () {
