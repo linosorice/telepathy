@@ -4,8 +4,8 @@ const LIGHT_RADIUS = 256
 
 export default class extends Phaser.Sprite {
   constructor ({ game, player }) {
-    let shadowTexture = game.add.bitmapData(game.width * 2, game.height * 2)
-    super(game, -game.width / 2, -game.height / 2, shadowTexture)
+    let shadowTexture = game.add.bitmapData(1920, 1920)
+    super(game, -game.width, -game.height, shadowTexture)
     this.shadowTexture = shadowTexture
     this.player = player
     this.blendMode = Phaser.blendModes.MULTIPLY
@@ -13,18 +13,18 @@ export default class extends Phaser.Sprite {
 
   update () {
     this.shadowTexture.context.fillStyle = 'rgb(0, 0, 0)'
-    this.shadowTexture.context.fillRect(0, 0, this.game.width * 2, this.game.height * 2)
+    this.shadowTexture.context.fillRect(0, 0, 1920, 1920)
 
       // Draw circle of light with a soft edge
     let gradient = this.shadowTexture.context.createRadialGradient(
-        this.player.x + this.game.width / 2, this.player.y + this.game.height / 2, LIGHT_RADIUS * 0.15,
-      this.player.x + this.game.width / 2, this.player.y + this.game.height / 2, LIGHT_RADIUS)
+        this.player.x + this.game.width, this.player.y + this.game.height, LIGHT_RADIUS * 0.15,
+      this.player.x + this.game.width, this.player.y + this.game.height, LIGHT_RADIUS)
     gradient.addColorStop(0, 'rgba(255, 255, 255, 1.0)')
     gradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)')
 
     this.shadowTexture.context.beginPath()
     this.shadowTexture.context.fillStyle = gradient
-    this.shadowTexture.context.arc(this.player.x + this.game.width / 2, this.player.y + this.game.height / 2,
+    this.shadowTexture.context.arc(this.player.x + this.game.width, this.player.y + this.game.height,
           LIGHT_RADIUS, 0, Math.PI * 2)
     this.shadowTexture.context.fill()
 

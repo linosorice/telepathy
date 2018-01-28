@@ -69,7 +69,7 @@ export default class extends Phaser.State {
     this.game.add.existing(this.torch)
 
     /* Set world bounds and camera */
-    this.game.world.setBounds(-this.game.width / 2, -this.game.height / 2, this.game.width * 2, this.game.height * 2)
+    this.game.world.setBounds(-560, -660, 1920, 1920)
     this.game.camera.follow(localPlayer)
 
     /* Transmission on */
@@ -108,6 +108,7 @@ export default class extends Phaser.State {
   render () {
     if (__DEV__) {
       this.game.debug.cameraInfo(this.game.camera, 32, 32)
+      this.game.debug.spriteCoords(this.monster, 32, 500)
     }
   }
 }
