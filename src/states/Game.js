@@ -16,15 +16,16 @@ export default class extends Phaser.State {
     heartbeat.volume = 1
     heartbeat.play()
 
-    /* Add defeat sound */
+    /* Add defeat and victory sounds */
     this.defeatSound = this.game.add.audio('defeat')
+    this.victorySound = this.game.add.audio('victory')
 
     this.player1 = new Player({
       game: this.game,
       x: 0,
       y: 0,
       asset: 'player',
-      networked: true
+      networked: false
     })
 
     this.player2 = new Player({
@@ -40,7 +41,7 @@ export default class extends Phaser.State {
       x: 200,
       y: 0,
       asset: 'monster',
-      networked: false
+      networked: true
     })
 
     /* Set battlefield */
@@ -58,7 +59,7 @@ export default class extends Phaser.State {
     this.game.add.existing(this.monster)
 
     /* Set local player */
-    const localPlayer = this.monster
+    const localPlayer = this.player1
 
     /* Torch */
     this.torch = new Torch({
@@ -93,6 +94,15 @@ export default class extends Phaser.State {
         this.defeat = true
       }
     }, null, this)
+
+    /* Victory */
+    this.game.physics.arcade.overlap(this.player1, this.player2, function (player1, player2) {
+      if (!this.victory) {
+        this.victorySound.play()
+        this.victory = true
+      }
+    }, null, this)
+
   }
 
   render () {
