@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import Player from '../sprites/Player'
+import Player from '../entities/Player'
 import MovementSystem from '../systems/MovementSystem'
 
 import MapSystem from '../systems/MapSystem'

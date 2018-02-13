@@ -1,6 +1,6 @@
 import Phaser from 'phaser'
-import Wall from '../sprites/Wall'
-import Ground from '../sprites/Ground'
+import Wall from '../entities/Wall'
+import Ground from '../entities/Ground'
 
 import { BATTLEFIELD_COLS, BATTLEFIELD_ROWS, TILE_SIZE_SPACED, ROOM_SIZE, ROOM_COLS, ROOM_ROWS, VARIANT_TILE, OBJ_PROB } from '../constants'
 import map from '../map'
