@@ -29,19 +29,9 @@ module.exports = {
     filename: 'bundle.js'
   },
   watch: true,
-  devServer: {
-    port: 9000,
-    publicPath: '/',
-    proxy: {
-      '/gamews': {
-        target: 'http://localhost:8000',
-        ws: true
-      }
-    }
-  },
   plugins: [
     definePlugin,
-    new webpack.optimize.CommonsChunkPlugin({name: 'vendor', filename: 'vendor.bundle.js'}),
+    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor'/* chunkName= */, filename: 'vendor.bundle.js'/* filename= */}),
     new HtmlWebpackPlugin({
       filename: '../index.html',
       template: './src/index.html',
@@ -58,6 +48,13 @@ module.exports = {
         removeEmptyAttributes: false
       },
       hash: false
+    }),
+    new BrowserSyncPlugin({
+      host: process.env.IP || 'localhost',
+      port: process.env.PORT || 3000,
+      server: {
+        baseDir: ['./', './build']
+      }
     })
   ],
   module: {

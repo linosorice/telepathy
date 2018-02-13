@@ -21,7 +21,7 @@ export default class extends Phaser.State {
       this.state.start('Game', true, false, this.i)
     }, 3000)
     */
-    if (this.i === 2)  {
+    if (this.i === 2) {
       this.state.start('Game', true, false, this.i)
     } else {
       socket.on('game_ready', () => {

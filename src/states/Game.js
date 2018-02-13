@@ -1,151 +1,56 @@
-/* globals __DEV__ */
 import Phaser from 'phaser'
-import Battlefield from './modules/Battlefield'
 import Player from '../sprites/Player'
-import Monster from '../sprites/Monster'
-import Torch from '../sprites/Torch'
+import MovementSystem from '../systems/MovementSystem'
 
-import socket from '../socket'
+import MapSystem from '../systems/MapSystem'
+import CollisionSystem from '../systems/CollisionSystem'
+import LightSystem from '../systems/LightSystem'
+import TransmissionSystem from '../systems/TransmissionSystem'
 
 export default class extends Phaser.State {
-  init (i) {
-    this.i = i
+  init () {
+    this.players = []
+    this.walls = []
   }
 
-  preload () {}
-
   create () {
-    /* Play heartbeat audio */
-    const heartbeat = this.game.add.audio('heartbeat')
-    heartbeat.loop = true
-    heartbeat.volume = 1
-    heartbeat.play()
+    this.mapSystem = new MapSystem(this.game)
+    this.walls = this.mapSystem.init()
 
-    /* Add defeat and victory sounds */
-    this.defeatSound = this.game.add.audio('defeat')
-    this.victorySound = this.game.add.audio('victory')
+    const player1 = this.createPlayer(100, 300, false, false)
+    const player2 = this.createPlayer(200, 300, true, false)
+    const enemy = this.createEnemy(300, 300, true, false)
 
-    socket.on('game_over', () => {
-      console.log('game is over')
-      setTimeout(() => this.state.start('Menu'), 2000)
-    })
+    this.players = [player1, player2, enemy]
 
-    this.player1 = new Player({
-      game: this.game,
-      x: 1000,
-      y: -200,
-      asset: 'player',
-      networked: this.i !== 0,
-      i: 0
-    })
+    this.movementSystem = new MovementSystem(this.game, this.players)
+    this.collisionSystem = new CollisionSystem(this.game, this.players, this.walls)
 
-    this.player2 = new Player({
-      game: this.game,
-      x: 0,
-      y: 0,
-      asset: 'player',
-      networked: this.i !== 1,
-      i: 1
-    })
+    this.lightSystem = new LightSystem(this.game, player1)
+    this.transmissionSystem = new TransmissionSystem(this.game, this.players)
 
-    this.monster = new Monster({
-      game: this.game,
-      x: 860,
-      y: 860,
-      asset: 'monster',
-      networked: this.i !== 2,
-      i: 2
-    })
-
-    /* Set battlefield */
-    let battlefield = new Battlefield(this.game, [this.player1, this.player2, this.monster])
-    battlefield.create()
-
-    /* Add shadows */
-    this.player1.addShadow()
-    this.player2.addShadow()
-    this.monster.addShadow()
-
-    /* Add entities */
-    this.game.add.existing(this.player1)
-    this.game.add.existing(this.player2)
-    this.game.add.existing(this.monster)
-
-    /* Set local player */
-    console.log('Game', this.i)
-    const localPlayer = this.i === 0 ? this.player1
-      : this.i === 1 ? this.player2
-         : this.monster
-
-    const otherPlayer = this.i === 0 ? this.player2
-      : this.i === 1 ? this.player1
-         : [this.player1, this.player2]
-
-    /* Torch */
-    this.torch = new Torch({
-      game: this.game,
-      player: localPlayer
-    })
-    this.game.add.existing(this.torch)
-
-    /* Set world bounds and camera */
     this.game.world.setBounds(-360, -560, 1920, 1920)
-    this.game.camera.follow(localPlayer)
+    this.game.camera.follow(player1.sprite)
+  }
 
-    socket.on('transmission', () => {
-      localPlayer.setTransmission(true)
-      setTimeout(() => {
-        localPlayer.setTransmission(false)
-        this.game.camera.follow(localPlayer)
-        this.torch.setPlayer(localPlayer)
-      }, 2000)
-      // if it's the monster, frame the two players in sequence
-      if (Array.isArray(otherPlayer)) {
-        this.game.camera.follow(otherPlayer[0])
-        this.torch.setPlayer(otherPlayer[0])
-        setTimeout(() => {
-          this.game.camera.follow(otherPlayer[1])
-          this.torch.setPlayer(otherPlayer[1])
-        }, 1000)
-      } else {
-        this.game.camera.follow(otherPlayer)
-        this.torch.setPlayer(otherPlayer)
-      }
-    })
-    /* Transmission on */
-    if(!Array.isArray(otherPlayer)) {
-      const keyTransm = this.game.input.keyboard.addKey(Phaser.Keyboard.ONE)
-      keyTransm.onDown.add(function () {
-        socket.emit('transmission')
-      }, this)
-    }
+  createPlayer (x, y, networked, lightOn) {
+    const shadow = this.game.add.sprite(x, y + 8, 'shadow')
+    shadow.anchor.setTo(0.5)
+    const player = new Player(this.add.sprite(x, y, 'player'), shadow, networked, lightOn)
+    return player
+  }
+
+  createEnemy (x, y, networked, lightOn) {
+    const shadow = this.game.add.sprite(x, y + 8, 'shadow')
+    shadow.anchor.setTo(0.5)
+    const enemy = new Player(this.add.sprite(x, y, 'monster'), shadow, networked, lightOn)
+    return enemy
   }
 
   update () {
-    /* Monster kills player */
-    this.game.physics.arcade.overlap(this.monster, [this.player1, this.player2],
-      function (monster, player) {
-      if (!this.defeat) {
-        socket.emit('game_over')
-        this.defeatSound.play()
-        this.defeat = true
-      }
-    }, null, this)
-
-    /* Victory */
-    this.game.physics.arcade.overlap(this.player1, this.player2, function (player1, player2) {
-      if (!this.victory) {
-        socket.emit('game_over')
-        this.victorySound.play()
-        this.victory = true
-      }
-    }, null, this)
-  }
-
-  render () {
-    if (__DEV__) {
-      this.game.debug.cameraInfo(this.game.camera, 32, 32)
-      this.game.debug.spriteCoords(this.player1, 32, 700)
-    }
+    this.movementSystem.update()
+    this.collisionSystem.update()
+    this.lightSystem.update()
+    this.transmissionSystem.update()
   }
 }
