@@ -8,7 +8,8 @@ export default class TransmissionSystem {
 
   update () {
     if (this.game.input.keyboard.isDown(Phaser.Keyboard.A)) {
-      // TODO: CREATE A PICTURE IN PICTURE FRAME FOR OTHERS PLAYERS
+      this.players.forEach(player => {
+      })
     }
   }
 }

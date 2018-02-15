@@ -17,7 +17,7 @@ export default class extends Phaser.State {
     this.mapSystem = new MapSystem(this.game)
     this.walls = this.mapSystem.init()
 
-    const player1 = this.createPlayer(100, 300, false, false)
+    const player1 = this.createPlayer(100, 300, false, true)
     const player2 = this.createPlayer(200, 300, true, false)
     const enemy = this.createEnemy(300, 300, true, false)
 
@@ -26,7 +26,7 @@ export default class extends Phaser.State {
     this.movementSystem = new MovementSystem(this.game, this.players)
     this.collisionSystem = new CollisionSystem(this.game, this.players, this.walls)
 
-    this.lightSystem = new LightSystem(this.game, player1)
+    this.lightSystem = new LightSystem(this.game, this.players)
     this.transmissionSystem = new TransmissionSystem(this.game, this.players)
 
     this.game.world.setBounds(-360, -560, 1920, 1920)
