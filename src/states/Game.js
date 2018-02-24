@@ -6,6 +6,7 @@ import MapSystem from '../systems/MapSystem'
 import CollisionSystem from '../systems/CollisionSystem'
 import LightSystem from '../systems/LightSystem'
 import TransmissionSystem from '../systems/TransmissionSystem'
+import {WORLD_HEIGHT, WORLD_WIDTH, WORLD_OFFSET_X, WORLD_OFFSET_Y} from '../constants'
 
 export default class extends Phaser.State {
   init () {
@@ -29,7 +30,7 @@ export default class extends Phaser.State {
     this.lightSystem = new LightSystem(this.game, this.players)
     this.transmissionSystem = new TransmissionSystem(this.game, this.players)
 
-    this.game.world.setBounds(-360, -560, 1920, 1920)
+    this.game.world.setBounds(-WORLD_OFFSET_X, -WORLD_OFFSET_Y, WORLD_HEIGHT, WORLD_WIDTH)
     this.game.camera.follow(player1.sprite)
   }
 
